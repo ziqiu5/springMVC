@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 开启组件扫描 -->
+    <context:component-scan base-package="com.atguigu.mvc"/>
+
+    <!-- 设置视图控制器 -->
+    <!-- 开启了视图控制器之后 controller中的所有请求映射RequestMapping将不再起作用,此时需要配置mvc的注解驱动 -->
+    <mvc:view-controller path="/" view-name="index"/>
+    <mvc:view-controller path="/add_emp" view-name="emp/add_emp"/>
+
+
+    <!-- 开启mvc驱动 处理对请求映射的请求访问
+        请求先会被mvc中的请求映射处理,再开启默认的servlet处理器,当请求映射中未匹配到时,会交给默认的servlet去处理-->
+    <mvc:annotation-driven/>
+
+    <!-- 开放默认servlet处理器 处理对静态资源的请求访问
+        所有的请求都被 前端控制器 所捕获,然后到控制器中去匹配请求映射,而静态资源并未被映射,此时需要开放
+        Tomcat中默认的servlet让其去处理访问静态资源的处理
+    -->
+    <mvc:default-servlet-handler/>
+
+
+    <!-- 配置Thymeleaf视图解析器 -->
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="templateEngine">
+            <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+                <property name="templateResolver">
+                    <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+
+                        <!-- 视图前缀 -->
+                        <property name="prefix" value="/WEB-INF/templates/"/>
+
+                        <!-- 视图后缀 -->
+                        <property name="suffix" value=".html"/>
+                        <property name="templateMode" value="HTML5"/>
+                        <property name="characterEncoding" value="UTF-8" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- 配置Druid数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/demo"/>
+        <property name="username" value="root"/>
+        <property name="password" value="cjx1125061985"/>
+    </bean>
+
+    <!--    创建 JdbcTemplate 对象
+          (JdbcTemplate相当于原始的 手动写好的 BaseDAO 类 ;
+          之前都是通过DAO层继承BaseDAO然后调用BaseDAO中相关的对于数据库的操作) -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+
+
+</beans>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script type="text/javascript" th:src="@{/static/js/jquery-1.7.2.js}"></script>
+</head>
+<body>
+
+<h1>首页</h1>
+<a th:href="@{/emp}">员工信息</a><br>
+<button id="btn01">按钮</button>
+
+<script type="text/javascript" th:src="@{/static/js/jquery-1.7.2.js}"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#btn01").click(function () {
+            alert(1);
+        })
+    })
+
+</script>
+
+</body>
+</html>

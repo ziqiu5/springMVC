@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>vue_demo</title>
+    <script type="text/javascript" src="static/js/vue.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <input v-model="username">{{username}}<br>
+    <input v-model="count">
+
+    <span v-if="count==1">count1</span>
+    <span v-else-if="count==2">count2</span>
+    <span v-else="count==3">count3</span><br>
+    <a :href="url">百度一下</a>
+    <input v-model="url"><hr>
+    <div>
+        <span v-for="(addr,i) in addrs">
+            {{i + 1}}--{{addr}}<br>
+        </span>
+    </div>
+    <hr>
+    <button @click="show()">点击</button>
+
+
+</div>
+<script type="text/javascript">
+    //页面加载完成
+     new Vue({
+        el: "#app",
+        data() {
+            return {
+                username: "",
+                count: 4,
+                url: "http://www.baidu.com",
+                addrs:["北京","上海","天津"]
+            }
+        },
+        methods:{
+            show:function (event) {
+                event.preventDefault();
+                alert("hello,vue!")
+            }
+        },
+         mounted(){
+            alert("页面加载完成...")
+         }
+    })
+
+</script>
+
+</body>
+</html>

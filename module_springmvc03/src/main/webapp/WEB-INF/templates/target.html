@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>target</title>
+</head>
+<body>
+
+<h1 th:text="${requestScope}">request域中的数据</h1>
+<h1 th:text="${session.sessionScope}">session域中的数据</h1>
+<h1 th:text="${application.applicationScope}">application域中的数据</h1>
+</body>
+</html>

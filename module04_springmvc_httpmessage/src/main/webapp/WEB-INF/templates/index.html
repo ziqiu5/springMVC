@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+
+<h1>首页</h1>
+<form th:action="@{/testRequestBody}" method="post">
+    用户名:<input type="text"><br>
+    密码:<input type="password"><br>
+    <input type="submit" value="登录">
+</form>
+<hr>
+<form th:action="@{/testRequestEntity}" method="post">
+    用户名:<input type="text" name="username"><br>
+    密码:<input type="password" name="password"><br>
+    <input type="submit" value="登录">
+</form>
+<hr>
+<a th:href="@{/testResponseBody}">测试@ResponseBody 响应报文中的响应体</a><br>
+<a th:href="@{/testResponseJavaPojo}">测试将java中的实体类作为响应报文中的响应体返回给客户端浏览器</a><br>
+
+<div id="div01">
+    <a th:href="@{/testAjaxRequestByVue}" @click="ajaxRequest">使用vue框架发测试ajax请求</a>
+</div>
+
+<a th:href="@{/testAjaxRequestByJquery}" class="ajaxRequest">使用jQuery框架发送ajax请求</a><br>
+
+
+<button th:href="@{/fileDown}" id="fileDownBtn">下载视频</button>
+<hr>
+<form th:action="@{/fileUpload}" method="post" enctype="multipart/form-data">
+    <table border="1" cellpadding="1" cellspacing="0">
+        <tr><td>上传头像: <input type="file" name="multipartFile"></td></tr>
+        <tr><td><input type="submit" value="确认上传"></td></tr>
+    </table>
+</form>
+<hr>
+<a th:href="@{/testExceptionResolver}">测试配置文件中配置的异常处理器</a>
+
+
+
+<script type="text/javascript" th:src="@{/static/js/jquery-1.7.2.js}"></script>
+<script type="text/javascript">
+    //页面加载完成
+    $(function () {
+        //给超链接绑定单击事件
+        $("a.ajaxRequest").click(function () {
+
+            //发送 ajax 请求,请求方式为post
+            $.post(
+                //发送 ajax请求 到url
+                this.href,
+                //请求参数
+                "username=ziqiu&password=123",
+                function (response) {
+                    alert("员工id:" + response.empId +  "员工姓名: "+ response.name);
+                }
+            );
+            //阻止超链接的默认行为
+            return false;
+        });
+
+
+        //给下载文件按钮绑定单击事件
+        $("#fileDownBtn").click(function () {
+            //发送请求到服务器
+            location.href = $(this).attr("href");
+        })
+
+
+    })
+
+
+</script>
+
+
+<script type="text/javascript" th:src="@{/static/js/vue.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/axios.min.js}"></script>
+<script type="text/javascript">
+
+    new Vue({
+        el: "#div01",
+        methods: {
+            ajaxRequest: function (event) {
+                //发送 ajax请求
+                axios({
+                    //请求方式
+                    method: "post",
+                    //将 ajax请求 到url
+                    url: event.target.href,
+                    //发送的 ajax请求参数
+                    params: {
+                        username: "ziqiu",
+                        password: "123"
+                    }
+                }).then(function (response) {
+                    alert(response.data.name);
+                });
+                //阻止默认行为的发生
+                event.preventDefault();
+            }
+
+
+        }
+
+    })
+
+
+</script>
+
+
+</body>
+</html>

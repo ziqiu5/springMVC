@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>员工信息</title>
+</head>
+<body>
+
+<table align="center" border="1" cellspacing="0" cellpadding="1" id="dataTable">
+    <tr>
+        <th colspan="6">员工信息</th>
+    </tr>
+    <tr>
+        <th>员工id</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>薪水</th>
+        <th colspan="2">操作</th>
+    </tr>
+    <tr th:each="emp : ${employeeList}">
+        <td th:text="${emp.empId}"></td>
+        <td th:text="${emp.name}"></td>
+        <td th:text="${emp.sex}"></td>
+        <td th:text="${emp.sal}"></td>
+        <td>
+            <a th:href="@{'/emp/'+${emp.empId}}" class="del_emp" @click="del_emp">删除</a>
+        </td>
+        <td>
+            <a th:href="@{'/emp/'+${emp.empId}}">修改</a>
+        </td>
+    </tr>
+
+    <tr>
+        <th colspan="6">
+            <button th:href="@{/add_emp}" id="add_emp">添加员工</button>
+        </th>
+    </tr>
+
+</table>
+
+<form method="post" id="delete_form">
+    <input type="hidden" name="_method" value="delete">
+</form>
+
+
+<!-- 使用jQuery完成删除员工功能 -->
+<script type="text/javascript" th:src="@{/static/js/jquery-1.7.2.js}"></script>
+<script type="text/javascript">
+    //页面加载完成
+    $(function () {
+        //给添加员工按钮绑定单击事件
+        $("#add_emp").click(function () {
+            //页面跳转 跳转到添加员工页面
+            //$(this).attr("href") --》 正在响应的jQuery对象中 href 属性值
+            location.href = $(this).attr("href");
+        });
+
+        //给删除超链接绑定单击事件
+        $("a.del_emp").click(function () {
+            //根据 id 获取 dom 对象
+            var delete_form = document.getElementById("delete_form");
+            //$(this)正在响应事件的 jQuery 对象  .attr("href") 获取对象中的href属性
+            //.attr("href","haha.com") 则是设置对象中的href属性成 haha.com
+            delete_form.action = $(this).attr("href");
+            //提交表单
+            delete_form.submit();
+            //阻止超链接的跳转
+            return false;
+        })
+
+
+    })
+</script>
+
+<!--&lt;!&ndash;  使用 vue 来完成删除员工功能 &ndash;&gt;-->
+<!--<script type="text/javascript" th:src="@{/static/js/vue.js}"></script>-->
+<!--<script type="text/javascript">-->
+<!--new Vue({-->
+<!--el:"#dataTable",-->
+<!--methods:{-->
+<!--del_emp:function (event) {-->
+<!--//通过id获取表单标签-->
+<!--var delete_form = document.getElementById("delete_form");-->
+<!--//将触发事件的超链接的href属性为表单的action属性赋值-->
+<!--delete_form.action = event.target.href;-->
+<!--//提交表单-->
+<!--delete_form.submit();-->
+<!--//阻止超链接的默认跳转行为-->
+<!--event.preventDefault();-->
+<!--}-->
+
+<!--}-->
+
+
+<!--})-->
+
+
+<!--</script>-->
+
+</body>
+</html>

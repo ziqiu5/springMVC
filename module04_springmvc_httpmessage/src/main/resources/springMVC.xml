@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+
+    <!-- 开启组件扫描 -->
+    <context:component-scan base-package="com.atguigu.mvc"/>
+
+    <!-- 开启 DefaultServlet 管理器 实现对静态资源的请求访问-->
+    <mvc:default-servlet-handler/>
+
+    <!-- 开启mvc注解驱动 -->
+    <mvc:annotation-driven/>
+
+    <!--  视图控制器 -->
+    <mvc:view-controller path="/" view-name="index"/>
+
+    <!--必须通过文件解析器的解析才能将文件转换为MultipartFile对象-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+
+    <!-- 配置拦截器 -->
+    <!--创建拦截器的bean对象 直接创建bean对象 表示的是对所有的请求都进行拦截-->
+    <bean id="myInterceptor01" class="com.atguigu.mvc.interceptor.MyInterceptor01"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <ref bean="myInterceptor01"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+    <!-- 配置Thymeleaf视图解析器 -->
+    <bean id="viewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="templateEngine">
+            <bean class="org.thymeleaf.spring5.SpringTemplateEngine">
+                <property name="templateResolver">
+                    <bean class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+
+                        <!-- 视图前缀 -->
+                        <property name="prefix" value="/WEB-INF/templates/"/>
+
+                        <!-- 视图后缀 -->
+                        <property name="suffix" value=".html"/>
+                        <property name="templateMode" value="HTML5"/>
+                        <property name="characterEncoding" value="UTF-8" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!--&lt;!&ndash;  配置异常处理器 &ndash;&gt;-->
+    <!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">-->
+        <!--<property name="exceptionMappings">-->
+            <!--<props>-->
+                <!--&lt;!&ndash;  配置出现异常后请求跳转的页面,也是由于前端控制器来进行处理 &ndash;&gt;-->
+                <!--<prop key="java.lang.ArithmeticException">error</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+        <!--&lt;!&ndash;  配置 req域中的请求参数 键为 exception 值为 java.lang.ArithmeticException&ndash;&gt;-->
+        <!--<property name="exceptionAttribute" value="exception"/>-->
+    <!--</bean>-->
+
+
+
+</beans>
